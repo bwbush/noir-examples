@@ -1,10 +1,14 @@
 use bigcurve::curves::secp521r1::{Secp521r1_Fq, Secp521r1_Fr};
 use bignum::BigNum;
 use noir_ecdsa::ecdsa::verify_secp521r1_ecdsa;
+use sha512::sha512::digest;
 
-fn main() {
 
-  let message_hash: [u8; 64] = [
+fn main(tbs: [u8; 822]) {
+
+  let message_hash: [u8; 64] = digest(tbs);
+
+  let message_hash_computed: [u8; 64] = [
     0x2c, 0xf3, 0x67, 0xa5, 0x2f, 0xa8, 0xdd, 0x43,
     0x31, 0x23, 0x2e, 0x2d, 0xed, 0xa6, 0x28, 0xaf,
     0x50, 0x9d, 0xa1, 0x21, 0xb8, 0x1e, 0xc8, 0x77,
@@ -14,7 +18,9 @@ fn main() {
     0x0d, 0x81, 0x5d, 0xba, 0xe5, 0x2f, 0x0f, 0x00,
     0x16, 0x44, 0xb0, 0x64, 0x36, 0xd1, 0x31, 0xbe
   ];
-  
+
+  assert(message_hash == message_hash_computed);
+
   let public_key_x: Secp521r1_Fq =
     Secp521r1_Fq::from_limbs([
       0x4aa107956ca437a66f058324139059,
@@ -57,10 +63,4 @@ fn main() {
   );
 
   assert(is_valid);
-}
-
-
-#[test]
-fn test_main() {
-  main()
 }
