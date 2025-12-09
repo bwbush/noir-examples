@@ -1,7 +1,7 @@
-# Verifying that an EE-ID is currently valid, using its hash
+# Verifying that an EE-ID is currently valid, using an intermediate CA's signature.
 
 ```bash
-nargo execute
+nargo execute --enable-brillig-constraints-check-lookback
 
 bb write_vk -b ./target/eeid.json -o target
 
